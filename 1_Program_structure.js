@@ -2,6 +2,7 @@
 
 /**
  * Looping a triangle
+ * 
  * Write a loop that makes seven calls to console.log
  * to output the following triangle:
  * 
@@ -19,6 +20,7 @@ for (let line = "#"; line.length < 8; line += "#")
 
 /**
  * FizzBuzz
+ * 
  * Write a program that uses console.log to print all the numbers from 1 to 100, 
  * with two exceptions.
  * For numbers divisible by 3, print "Fizz" instead of the number, 
@@ -53,6 +55,7 @@ for (let n = 1; n <= 100; n++) {
 
 /**
  * ChessBoard
+ * 
  * Write a program that creates a string that represents an 8×8 grid,
  * using newline characters to separate lines.
  * At each position of the grid there is either a space or a "#" character.
