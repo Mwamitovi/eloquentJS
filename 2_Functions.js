@@ -6,9 +6,15 @@
  * Just like the standard function Math.min that returns its smallest argument,
  * Write a function min() that takes two arguments and returns their minimum. 
  */
-function min(a, b){
-    if(a<b) return a;
-    if(a>b) return b;
+// My solution
+// function min(a, b){
+//     if(a<b) return a;
+//     if(a>b) return b;
+// }
+// Answer
+function min(a, b) {
+    if (a < b) return a;
+    else return b;
 }
 
 
@@ -24,17 +30,25 @@ function min(a, b){
  * The function should accept a single parameter (a positive, whole number) and return a Boolean.
  * Test it on 50 and 75. See how it behaves on -1. (Why? Can you think of a way to fix this?) 
  */
+// My solution, returns "undefined" is negative argument
+// function isEven(n) {
+//     if(n==0) {
+//         return "True";
+//     } else if(n==1) {
+//         return "False";
+//     } else {
+//         while(n>1){
+//             n -= 2;
+//             return isEven(n);
+//         }
+//     }
+// }
+
 function isEven(n) {
-    if(n==0) {
-        return "True";
-    } else if(n==1) {
-        return "False";
-    } else {
-        while(n>1){
-            n -= 2;
-            return isEven(n);
-        }
-    }
+    if (n == 0) return true;
+    else if (n == 1) return false;
+    else if (n < 0) return isEven(-n);
+    else return isEven(n - 2);
 }
 
 
@@ -49,14 +63,19 @@ function isEven(n) {
  * Write a function countBs() that takes a string as its only argument and 
  * returns a number that indicates how many uppercase “B” characters there are in the string.
  */
-function countBs(str) {
-    let count = 0;
-    for(let x=0; x<str.length; x++ ) {
-        if(str[x] == "B"){
-            count += 1;
-        }
-    }
-    return count;
+// My solution
+// function countBs(str) {
+//     let count = 0;
+//     for(let x=0; x<str.length; x++ ) {
+//         if(str[x] == "B"){
+//             count += 1;
+//         }
+//     }
+//     return count;
+// }
+// More effective solution, turns out countChar() is a closure, withi countBs()
+function countBs(string) {
+    return countChar(string, "B");
 }
 
 /**
@@ -65,10 +84,11 @@ function countBs(str) {
  * (rather than counting only uppercase “B” characters). 
  * Rewrite countBs() to make use of this new function.
  */
+// Ok, my solution was efficient
 function countChar(word, letter) {
     let count = 0;
-    for(let x=0; x<word.length; x++ ) {
-        if(str[x] == letter){
+    for(let i=0; i<word.length; i++ ) {
+        if(str[i] == letter){
             count += 1;
         }
     }
