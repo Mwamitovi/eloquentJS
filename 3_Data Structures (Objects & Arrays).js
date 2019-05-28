@@ -218,8 +218,7 @@ function deepEqual(a, b) {
     // Test if you are dealing with a real object, typeof x == "object" && x != null. 
     // Be careful to compare properties only when both arguments are objects. 
     // In all other cases you can just immediately return the result of applying ===.
-    if (a == null || typeof a != "object" ||
-        b == null || typeof b != "object") return false;
+    if (a == null || typeof a != "object" || b == null || typeof b != "object") return false;
     // Use Object.keys to go over the properties
     let keysA = Object.keys(a), keysB = Object.keys(b);
     // Check if both objects have the same number of properties 
