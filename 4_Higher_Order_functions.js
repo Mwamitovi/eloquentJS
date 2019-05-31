@@ -100,3 +100,80 @@ function every2(array, predicate) {
 // → false
 // console.log(every([], n => n < 10));
 // → true
+
+
+/**
+ * Dominant writing direction
+ * 
+ * Write a function that computes the dominant writing direction in a string of text. 
+ * Remember that each script object has a direction property that can be "ltr" (left to right), 
+ * "rtl" (right to left), or "ttb" (top to bottom).
+ * 
+ * Hint:
+ * The dominant direction is the direction of a majority of the characters 
+ * that have a script associated with them. 
+ * The characterScript() and countBy() functions defined earlier, in the chapter, are useful here.
+ * You have to count characters by a criterion based on characterScript() and then 
+ * filter out the part of the result that refers to uninteresting (script-less) characters.
+ * Finding the direction with the highest character count can be done with reduce(). 
+ */
+
+// countBy() - expects a collection (anything that we can loop over with for/of), 
+// and a function that computes a group name for a given element.
+// It returns an array of objects, each of which names a group and 
+// tells you the number of elements that were found in that group.
+function countBy(items, groupName) {    
+    let counts = [];
+    for (let item of items) {
+        let name = groupName(item);
+        let known = counts.findIndex(c => c.name == name);
+
+        if (known == -1) {
+            counts.push({name, count: 1});
+        } else {
+            counts[known].count++;
+        }
+    }
+    return counts;
+}
+
+// use case
+// console.log(countBy([1, 2, 3, 4, 5], n => n > 2));
+// → [{name: false, count: 2}, {name: true, count: 3}]
+
+
+// characterScript() - Remember that each script has an array of character code ranges 
+// associated with it, so given a character code we can find the corresponding script (if any)
+function characterScript(code) {
+    for (let script of SCRIPTS) {
+        // some() is a higher-order function. It takes a test function and 
+        // tells you if that function returns "true" for any of the elements in the array
+        if (script.ranges.some(([from, to]) => { return code >= from && code < to; })) {
+            return script;
+        }
+    }
+    return null;
+}
+
+// use case
+// console.log(characterScript(121));
+// → {name: "Latin", ranges: Array(31), direction: "ltr", year: -700, living: false, …}
+
+
+// Answer
+function dominantDirection(text) {
+    let counted = countBy(text, char => {
+        let script = characterScript(char.codePointAt(0));
+        return script ? script.direction : "none";
+    }).filter(({name}) => name != "none");
+  
+    if (counted.length == 0) return "ltr";
+  
+    return counted.reduce((a, b) => a.count > b.count ? a : b).name;
+}
+  
+// use case
+//   console.log(dominantDirection("Hello!"));
+// → ltr
+//   console.log(dominantDirection("Hey, مساء الخير"));
+// → rtl
