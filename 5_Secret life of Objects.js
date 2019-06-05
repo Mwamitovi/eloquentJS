@@ -14,8 +14,7 @@
  * that is, the distance of the point (x, y) from the origin (0, 0).
  */
 // Answer
-// ps: I got the declaration, right.
-// the rest was tricky indeed
+// ps: I got the declaration, right. But the rest was tricky business.
  class Vec {
     constructor(x, y){
         this.x = x;
@@ -87,6 +86,58 @@
  * Use the === operator, or something equivalent such as indexOf, 
  * to determine whether two values are the same.
  * 
- * Give the class a static from method that takes an iterable object as argument and
+ * Give the class a static from() method that takes an iterable object as argument and
  * creates a group that contains all the values produced by iterating over it. 
  */
+// Answer
+class Group{
+
+    constructor(){
+        // we create an empty array
+        this.elements = [];
+    }
+
+    add(value){
+        if(!this.has(value)){
+            // we test if value isn't already there
+            // then we add it to the group
+            this.elements.push(value);
+        }
+    }
+
+    delete(value){
+        // Ok, this can work only if this is the last value
+        // if(this.has(value)){ this.elements.pop(value); }
+        // Instead, we use filter() to create a new array
+        // without the 'deleted' value
+        this.elements = this.elements.filter(n => n !== value);
+    }
+
+    has(value){
+        // we use the inbuilt array method includes()
+        return this.elements.includes(value);
+    }
+
+    static from(args){
+        let group = new Group;
+        for(let value of args){
+            group.add(value);
+        }
+        return group;
+    }
+}
+
+// use cases
+// let group = Group.from([8,9,10]);
+// console.log(group.has(8));
+// → true
+// console.log(group.has('lydia'));
+// → false
+// console.log(group.add(11));
+// console.log(group);
+// → Group {members: Array(4)}
+// console.log(group.delete(8));
+// console.log(group);
+// → Group {members: Array(3)}
+// console.log(group.has(8));
+// → false
