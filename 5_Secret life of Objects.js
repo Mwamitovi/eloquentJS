@@ -227,3 +227,11 @@ class GroupIterator{
  * the method value. Can you think of a way to call hasOwnProperty on an object 
  * that has its own property by that name?
  */
+// Answer
+let map = {one: true, two: true, hasOwnProperty: true};
+
+// use case
+// console.log(Object.prototype.hasOwnProperty.call(map, "hasOwnProperty"));
+// → true
+// console.log(Object.prototype.hasOwnProperty.call(map, "two"));
+// → true
