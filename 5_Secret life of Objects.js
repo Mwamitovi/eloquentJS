@@ -141,3 +141,89 @@ class Group{
 // → Group {members: Array(3)}
 // console.log(group.has(8));
 // → false
+
+
+/**
+ * Iterable groups
+ * 
+ * Make the Group() class from the previous exercise iterable. 
+ * Refer to the section about the iterator interface earlier in the chapter,
+ * if you aren’t clear on the exact form of the interface anymore.
+ * 
+ * If you used an array to represent the group’s members, 
+ * don’t just return the iterator created by calling the Symbol.iterator() method on the array.
+ * That would work, but it defeats the purpose of this exercise.
+ * It is okay if your iterator behaves strangely when the group is modified during iteration.
+ */
+// Answer
+class Group{
+
+    constructor(){
+        this.elements = [];
+    }
+
+    add(value){
+        if(!this.has(value)){ this.elements.push(value); }
+    }
+
+    delete(value){
+        this.elements = this.elements.filter(n => n !== value);
+    }
+
+    has(value){
+        return this.elements.includes(value);
+    }
+
+    static from(args){
+        let group = new Group;
+        for(let value of args){
+            group.add(value);
+        }
+        return group;
+    }
+
+    // method returns "new" instance
+    // of the iterator class for the group
+    [Symbol.iterator](){
+        return new GroupIterator(this);
+    }
+}
+
+// define an iterator group
+class GroupIterator{
+
+    constructor(group){
+        this.group = group;
+        this.position = 0;
+    }
+
+    next(){
+        if(this.position >= this.group.elements.length){ return {done: true}; }
+        else{
+            let result = {value: this.group.elements[this.position], done: false};
+            this.position++;
+            return result;
+        }
+    }
+}
+
+// Use case
+// for(let unit of Group.from(['a','b','c','d'])){
+//    console.log(unit); }
+// → a
+// → b
+// → c
+// → d
+
+
+/**
+ * Borrowing a method
+ * 
+ * Earlier in the chapter, we noted that an object’s `hasOwnProperty` can be used as a more robust 
+ * alternative to the `in` operator when you want to ignore the prototype’s properties. 
+ * 
+ * But what if your map needs to include the word hasOwnProperty? 
+ * You won’t be able to call that method anymore because the object’s own property hides 
+ * the method value. Can you think of a way to call hasOwnProperty on an object 
+ * that has its own property by that name?
+ */
