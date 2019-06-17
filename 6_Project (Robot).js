@@ -44,7 +44,7 @@ const routes =[
  * So let's convert the list of routes to a data structure that, for each place,
  * tells us what can be reached from there.
  */
-// Define buildGraph()
+// define buildGraph()
 // accepts an array,  and returns a map object.
 // This map object stores an array of connected nodes for each node.
 // We use split() to convert from strings to two-element arrays,
@@ -65,3 +65,22 @@ function buildGraph(edges) {
    return graph;
 }
 
+// define routesGraph,
+// variable that points to map object, built from routes array.
+// Note that our routeGraph, will have a total of 30 possible routes (from, to)
+const routesGraph = buildGraph(routes);
+
+// routesGraph
+// {
+//    Lubiri Sec. School: (3) ["Rubaga Hospital", ...],
+//    Lungujja Progressive Primary: (2) ["Lubiri Sec. School", ...],
+//    Mengo Hospital: (3) ["Mengo Post Office", ...],
+//    Mengo Post Office: (2) ["Shell Rubaga", "Mengo Hospital"],
+//    Miracle Center: (2) ["Shell Rubaga", "Rubaga Hospital"],
+//    Namirembe Cathedral: (2) ["Mengo Hospital", "Old Kampala Mosque"],
+//    New Taxi Park: (2) ["Old Kampala Mosque", "Shell Rubaga"],
+//    Old Kampala Mosque: (3) ["Shell Rubaga", "New Taxi Park", ...],
+//    Rubaga Hospital: (4) ["Shell Rubaga", "Miracle Center", ...],
+//    Shell Rubaga: (5) ["Mengo Post Office", "Miracle Center", ...],
+//    Victory City Church: (2) ["Rubaga Hospital", "Lubiri Sec. School"]
+// }
