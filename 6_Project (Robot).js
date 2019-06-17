@@ -44,4 +44,24 @@ const routes =[
  * So let's convert the list of routes to a data structure that, for each place,
  * tells us what can be reached from there.
  */
-// 
+// Define buildGraph()
+// accepts an array,  and returns a map object.
+// This map object stores an array of connected nodes for each node.
+// We use split() to convert from strings to two-element arrays,
+// in the format of start-end, as separate strings.
+function buildGraph(edges) {
+   let graph = Object.create(null);
+   function addEdge(from, to) {
+      if (graph[from] == null) {
+         graph[from] = [to];
+      } else {
+         graph[from].push(to);
+      }
+   }
+   for (let [from, to] of edges.map(r => r.split("-"))) {
+      addEdge(from, to);
+      addEdge(to, from);
+   }
+   return graph;
+}
+
