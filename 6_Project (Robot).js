@@ -11,12 +11,10 @@
   * Village: Rubaga-North area, Kampala
   * 
   * We shall test case our postabot with a sample area served by the Mengo Post Office.
-  * Our test involves 11 places with 15 routes between them.
-  * This network of routes forms a graph, which is a collection of points (places) with
-  * lines between them (roads). This graph will be the world that our "postabot" moves through. 
+  * Our test involves 11 places with 15 possible routes between them. 
   */
- // define an array of roads
- const routes =[
+ // define an array of routes
+const routes =[
     "Mengo Post Office-Shell Rubaga",
     "Mengo Post Office-Mengo Hospital",
     "Shell Rubaga-Miracle Center",
@@ -32,4 +30,18 @@
     "Lubiri Sec. School-Lungujja Progressive Primary",
     "Mengo Hospital-Lungujja Progressive Primary",
     "Shell Rubaga-New Taxi Park"
- ]
+]
+ 
+
+/**
+ * Data structuring: build Graph
+ * 
+ * This network of routes in the area forms a graph.
+ * A graph is a collection of points (places) with lines between them (routes).
+ * This graph will be the world that our robot moves through. 
+ * The array of strings isn’t very easy to work with.
+ * Our interest is in the destinations that we can reach from a given place.
+ * So let's convert the list of routes to a data structure that, for each place,
+ * tells us what can be reached from there.
+ */
+// 
