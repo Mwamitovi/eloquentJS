@@ -399,3 +399,31 @@ function findRoute(graph, from, to) {
       }
    }
 }
+
+
+/**
+ * This robot uses its memory value as a list of directions to move in, just like the route-following robot.
+ *  
+ * Whenever that list is empty, it has to figure out what to do next. 
+ * It takes the first undelivered parcel in the set and, 
+ * if that parcel hasn’t been picked up yet, plots a route toward it.
+ * 
+ * If the parcel has been picked up, it still needs to be delivered, 
+ * so the robot creates a route toward the delivery address instead. 
+ */
+
+// Define goalOrientedRobot
+// accepts an object (having currentPlace and ourMail) and a route array (defaults to empty)
+// returns direction to move in.
+function goalOrientedRobot({currentPlace,ourMail}, route = []) {
+   if(route.length == 0) {
+       let mail = ourMail[0];
+       if(mail.place != currentPlace) {
+           route = findRoute(routesGraph, currentPlace, mail.place);
+       } else {
+           route = findRoute(routesGraph, currentPlace, mail.address)
+       }
+   }
+   return { direction: route[0], memory: route.slice(1) };
+}
+
