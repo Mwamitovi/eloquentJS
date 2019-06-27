@@ -151,7 +151,7 @@ let firstState = new VillageState(
 let nextState = first.move("Shell Rubaga");
 
 // Notice, here, we have moved to "Shell Rubaga"
-nextState.place;
+nextState.currentPlace;
 // → Shell Rubaga
 
 // And, in this state, ourMail has been delivered
@@ -160,7 +160,7 @@ nextState.ourMail;
 
 // Notice that our "initial" state remains unchanged
 // Because of the transforming functions, map() and filter()
-firstState.place;
+firstState.currentPlace;
 // → Mengo Post Office
 
 
@@ -175,3 +175,22 @@ firstState.place;
  * Thus, the robot returns an object containing both the direction it wants to move in,
  * and a memory value that will be given back to it the next time it is called.
  */
+
+/**
+ * Strategy: Move randomly
+ * 
+ * What is the dumbest strategy that could possibly work? 
+ * `Postabot` could just move in a random direction every turn. 
+ * That means, with great likelihood, it will eventually run into all parcels and 
+ * then also at some point reach the place where they should be delivered. 
+ */
+
+// Define randomPick()
+// accepts an array and returns a random index.
+// Note that Math.random() always returns a number between 0-1, but always below 1.
+// So we multiply it by the array length, and apply Math.floor() to get random index (choice)
+function randomPick(array) {
+   let choice = Math.floor(Math.random() * array.length);
+   return array[choice];
+}
+
