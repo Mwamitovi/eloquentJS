@@ -313,3 +313,89 @@ runRobot(VillageState.random(), routeRobot);
 // → Moved to Namirembe Cathedral
 // → ...
 // → Done in 18 turns
+
+
+/**
+ * Strategy-3: Implement a Pathfinder 
+ * 
+ * `Postabot` could work more effectively,
+ * if it adjusted its behavior to the actual work that needs to be done.
+ * To do this, it has to be able to intentionally move toward a given parcel or
+ * toward the location where a parcel has to be delivered. 
+ * To do this, even when the goal is more than one move away, 
+ * will require some kind of route-finding function.
+ * 
+ * The problem of finding a route through a graph is a typical search problem.
+ * We can tell whether a given solution (a route) is a valid solution, 
+ * but we can’t directly compute the solution the way we could for 2 + 2. 
+ * Instead, we have to keep creating potential solutions until we find one that works.
+ * 
+ * The number of possible routes through a graph is infinite. 
+ * But when searching for a route from A to B, 
+ * we are interested only in the ones that start at A. 
+ * We also don’t care about routes that visit the same place twice — 
+ * those are definitely not the most efficient route anywhere. 
+ * So that cuts down on the number of routes that the route finder has to consider.
+ * In fact, we are mostly interested in the shortest route. 
+ * So we want to make sure we look at short routes before we look at longer ones. 
+ * 
+ * A good approach would be to “grow” routes from the starting point, 
+ * exploring every reachable place that hasn’t been visited yet, until a route reaches the goal. 
+ * That way, we’ll only explore routes that are potentially interesting, and 
+ * we’ll find the shortest route (or one of the shortest routes, if there are more than one) to the goal.
+ */
+
+/**
+ * Work plan
+ * 
+ * The exploring has to be done in the right order — 
+ * the places that were reached first have to be explored first. 
+ * We can’t immediately explore a place as soon as we reach it because that 
+ * would mean places reached from there would also be explored immediately, and so on, 
+ * even though there may be other, shorter paths that haven’t yet been explored.
+ * 
+ * Therefore, we need a work list, 
+ * which is an array of places that should be explored next, along with the route that got us there.
+ * Our search then takes the next item in the list and explores that, 
+ * which means all roads going from that place are looked at.
+ * 
+ * Imagine this as a web of known routes crawling out from the start location, 
+ * growing evenly on all sides (but never tangling back into itself).
+ * As soon as the first thread reaches the goal location, 
+ * that thread is traced back to the start, giving us our route.
+ */
+
+// Define findRoute()
+// accepts an object (graph), from and to (locations),
+// then returns a filled work list to guide the robot movement.
+// It starts with an empty work list, containing just the start position and an empty route.
+// The search is implemented by exploring the next item in the list, 
+// thus all roads going from that place are evaluated. 
+// If one of them is the goal, a finished route can be returned. 
+// Otherwise, if we haven’t looked at this place before, a new item is added to the list.
+// If we have looked at it before, given we focus on short routes first, 
+// it means that we’ve found either a longer route to that place or 
+// one precisely as long as the existing one, and we don’t need to explore it.
+// Notice, function doesn’t handle a situation where there are no more work items on the work list,
+// because we know that our graph is connected, 
+// meaning that every location can be reached from all other locations. 
+// THus we are always able to find a route between two points, and the search can’t fail.
+function findRoute(graph, from, to) {
+   let work = [
+      { at: from, 
+        route: []
+      }
+   ];
+   for(let i=0; i < work.length; i++) {
+      let {at, route} = work[i];
+      for(let place of graph[at]) {
+         if(place == to) return route.concat(place);
+         if(!work.some(w => w.at == place)) {
+            work.push(
+               { at: place, 
+                 route: route.concat(place)
+               });
+         }
+      }
+   }
+}
