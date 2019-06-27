@@ -170,7 +170,7 @@ firstState.currentPlace;
  */
 
 /**
- * Strategy: Move randomly
+ * Strategy-1: Move randomly
  * 
  * What is the dumbest strategy that could possibly work? 
  * `Postabot` could just move in a random direction every turn. 
@@ -251,7 +251,7 @@ VillageState.random = function(mailCount = 5) {
    return new VillageState("Mengo Post Office", ourMail);
 };
 
-// test case: 
+// test case: (see runRobot.js)
 // It takes `Postabot` a lot of turns to deliver the 'mail' because it isn’t planning ahead very well.
 
 // Note: 
@@ -264,3 +264,42 @@ runRobot(VillageState.random(), randomRobot);
 // → Moved to Lungujja Progressive Primary
 // → ...
 // → Done in 56 turns
+
+
+/**
+ * Strategy-2: Identify a key route
+ * 
+ * The crucial improvement would be to take a hint from the way real-world mail delivery works. 
+ * If we find a route that passes all places in the area, Postabot could run that route twice, 
+ * at which point it is guaranteed to be done. 
+ */
+
+// Here is one such route (starting from the Mengo Post Office):
+const mailRoute = [
+	"Mengo Hospital",
+	"Namirembe Cathedral",
+	"Mengo Hospital",
+	"Lungujja Progressive Primary",
+	"Lubiri Sec. School",
+	"Victory City Church",
+	"Lubiri Sec. School",
+	"Rubaga Hospital",
+	"Miracle Center",
+	"Shell Rubaga",
+	"New Taxi Park",
+	"Old Kampala Mosque",
+	"Shell Rubaga",	
+	"Mengo Post Office",
+]
+
+// Define routeRobot()
+// to implement the route-following robot, we’ll need to make use of robot memory. 
+// The robot keeps the rest of its route in its memory and drops the first element every turn.
+// accepts state and memory array (defaults to an empty array), returns direction to move in
+// Note the difference from the randomRobot()
+function routeRobot(state, memory = []) {
+   if(memory.length == 0) {
+      memory = mailRoute;
+   }
+   return { direction: memory[0], memory: memory.slice(1) };
+}
