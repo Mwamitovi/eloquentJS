@@ -250,3 +250,17 @@ VillageState.random = function(mailCount = 5) {
    }
    return new VillageState("Mengo Post Office", ourMail);
 };
+
+// test case: 
+// It takes `Postabot` a lot of turns to deliver the 'mail' because it isn’t planning ahead very well.
+
+// Note: 
+// JavaScript functions can be called with less/extra arguments without ill effects.
+// A case in point is that, below, we don't call runRobot() with a memory argument, 
+// while we call randomRobot() with a memory argument (inside runRobot())
+
+runRobot(VillageState.random(), randomRobot);
+// → Moved to Mengo Hospital
+// → Moved to Lungujja Progressive Primary
+// → ...
+// → Done in 56 turns
