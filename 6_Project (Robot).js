@@ -136,3 +136,29 @@ class VillageState {
       }
    }
 }
+
+// Note that "ourMail" objects aren’t changed when they are moved but re-created. 
+// move() gives us a new village state but leaves the old one entirely intact.
+// See test case below...
+
+// our "inital" state
+let firstState = new VillageState(
+   "Mengo Post Office",
+   [{place: "Mengo Post Office", address: "Shell Rubaga"}]
+);
+
+// our "next" state
+let nextState = first.move("Shell Rubaga");
+
+// Notice, here, we have moved to "Shell Rubaga"
+nextState.place;
+// → Shell Rubaga
+
+// And, in this state, ourMail has been delivered
+nextState.ourMail;
+// → []
+
+// Notice that our "initial" state remains unchanged
+// Because of the transforming functions, map() and filter()
+firstState.place;
+// → Mengo Post Office
