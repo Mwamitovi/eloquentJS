@@ -1,7 +1,7 @@
 
 // run on June/27/2019
 
-// using random strategy
+// test-case-1: using random strategy
 runRobot(VillageState.random(), randomRobot);
 
 // VM115:10 Moved to Mengo Hospital
@@ -63,7 +63,7 @@ runRobot(VillageState.random(), randomRobot);
 // VM115:4 Done in 56 turns
 
 
-// using a mailRoute
+// test-case-2: using a mailRoute
 runRobot(VillageState.random(), routeRobot)
 
 // VM115:10 Moved to Mengo Hospital

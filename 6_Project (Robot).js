@@ -251,7 +251,7 @@ VillageState.random = function(mailCount = 5) {
    return new VillageState("Mengo Post Office", ourMail);
 };
 
-// test case: (see runRobot.js)
+// test case-1: (see mailDelivery.js)
 // It takes `Postabot` a lot of turns to deliver the 'mail' because it isn’t planning ahead very well.
 
 // Note: 
@@ -303,3 +303,13 @@ function routeRobot(state, memory = []) {
    }
    return { direction: memory[0], memory: memory.slice(1) };
 }
+
+// test case-2: (see mailDelivery.js)
+// This `Postabot` is a lot faster already. 
+// It’ll take a maximum of 18 turns (twice the 14-step route) but usually less.
+
+runRobot(VillageState.random(), routeRobot);
+// → Moved to Mengo Hospital
+// → Moved to Namirembe Cathedral
+// → ...
+// → Done in 18 turns
