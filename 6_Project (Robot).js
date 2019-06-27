@@ -195,3 +195,30 @@ function randomRobot(state) {
       direction: randomPick(routesGraph[state.currentPlace])
    };
 }
+
+
+/**
+ * Intelligence: `Postabot` looks at the 'state' and decides in which direction it wants to move.
+ * 
+ * We could conclude that our robot is a function that 
+ * takes a VillageState object and returns the name of a nearby place.
+ * Because we want robots to be able to remember things, so that they can make and execute plans,
+ * we also pass them their memory and allow them to return a new memory. 
+ */
+
+// Define runRobot()
+// accepts state, robot and memory (because we need an intelligent robot)
+// return an object containing both the direction it wants to move in,
+// and a memory value that will be given back to it the next time it is called.
+function runRobot(state, robot, memory) {
+   for(let turn = 0;; turn++) {
+      if(state.ourMail.length == 0) {
+         console.log(`Done in ${turn} turns`);
+         break;
+      }
+      let action = robot(state, memory);
+      state = state.move(action.direction);
+      memory = action.memory;
+      console.log(`Moved to ${action.direction}`);
+   }
+}
