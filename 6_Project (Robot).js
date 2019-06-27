@@ -222,3 +222,31 @@ function runRobot(state, robot, memory) {
       console.log(`Moved to ${action.direction}`);
    }
 }
+
+
+/**
+ * Lights, Camera, Action:
+ * 
+ * To put this sophisticated robot to work, 
+ * we first need a way to create a new state with some parcels. 
+ * A static method (written below by directly adding a property to the constructor),
+ * is a good place to put that functionality.
+ */
+
+// Define random() - static method
+// accepts a mailCount (or default = 5) and returns a new VillageState
+// We don’t want any 'mail' that is sent from the same place that it is addressed to. 
+// Thus, the do loop keeps picking new places when it gets one that’s equal to the address.
+VillageState.random = function(mailCount = 5) {
+   let ourMail = [];
+   for(let i = 0; i < mailCount; i++) {
+      let address = randomPick(Object.keys(routesGraph));
+      let place;
+      do {
+         place = randomPick(Object.keys(routesGraph));
+      } while (place == address);
+
+      ourMail.push({place, address});
+   }
+   return new VillageState("Mengo Post Office", ourMail);
+};
