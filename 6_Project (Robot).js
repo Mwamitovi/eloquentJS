@@ -162,3 +162,16 @@ nextState.ourMail;
 // Because of the transforming functions, map() and filter()
 firstState.place;
 // → Mengo Post Office
+
+
+
+/**
+ * Simulation: `Postabot` looks at the 'state' and decides in which direction it wants to move.
+ *  
+ * We could conclude that our robot is a function that 
+ * takes a VillageState object and returns the name of a nearby place.
+ * Because we want robots to be able to remember things, so that they can make and execute plans,
+ * we also pass them their memory and allow them to return a new memory. 
+ * Thus, the robot returns an object containing both the direction it wants to move in,
+ * and a memory value that will be given back to it the next time it is called.
+ */
