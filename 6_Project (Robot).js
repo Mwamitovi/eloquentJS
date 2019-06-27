@@ -166,14 +166,7 @@ firstState.currentPlace;
 
 
 /**
- * Simulation: `Postabot` looks at the 'state' and decides in which direction it wants to move.
- *  
- * We could conclude that our robot is a function that 
- * takes a VillageState object and returns the name of a nearby place.
- * Because we want robots to be able to remember things, so that they can make and execute plans,
- * we also pass them their memory and allow them to return a new memory. 
- * Thus, the robot returns an object containing both the direction it wants to move in,
- * and a memory value that will be given back to it the next time it is called.
+ * SIMULATION PROCESS
  */
 
 /**
@@ -194,3 +187,11 @@ function randomPick(array) {
    return array[choice];
 }
 
+// Define randomRobot()
+// This robot does not need to remember anything.
+// accepts the state and returns which direction it needs to move from here
+function randomRobot(state) {
+   return {
+      direction: randomPick(routesGraph[state.currentPlace])
+   };
+}
