@@ -427,3 +427,12 @@ function goalOrientedRobot({currentPlace,ourMail}, route = []) {
    return { direction: route[0], memory: route.slice(1) };
 }
 
+// test-case-3: (see mailDelivery.js)
+// This `Postabot` often finishes the task of delivering 5 parcels in about 16 turns.
+// It's slightly better than routeRobot but still definitely not optimal.
+
+runRobot(VillageState.random(), goalOrientedRobot);
+// → Moved to Mengo Hospital
+// → Moved to Namirembe Cathedral
+// → ...
+// → Done in 16 turns
