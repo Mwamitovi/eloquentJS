@@ -90,7 +90,7 @@ const routesGraph = buildGraph(routes);
 
 
 /**
- * Task: Understanding the state of our postabot
+ * Task: Understanding the state of our `Postabot`
  * 
  * There is "mail" in various places, each addressed to some other place.
  * Our postabot picks "mail" when it comes to them (start), 
@@ -105,7 +105,34 @@ const routesGraph = buildGraph(routes);
  * 
  * So let's reduce the village state down to some values that define it.
  * There's postabot's current location, and the collection of undelivered "mail",
- * each of these has a current location and a destination address.
+ * each having a current location and a destination address.
  * Also we need a way to compute a new state for each situation after the move,
  * not when postabot is moving (in transition).
  */
+
+// define VillageState{}
+// Within the moves() method is where the magic is!
+// In there, we check if there's a route from our current place to the destination,
+// and if not, we return the old state since this is not a valid move.
+// Else we sort the "mail" while at this point.
+// We use map() to identify "mail" which needs to be moved to a new address (moving process).
+// And utilize filter() to actually deliver "mail" once at the right address.
+class VillageState {
+
+   constructor(currentPlace, ourMail) {
+      this.currentPlace = currentPlace;
+      this.ourMail = ourMail;
+   }
+
+   move(destination) {
+      if(!routesGraph[this.currentPlace].includes(destination)) {
+         return this;
+      } else {
+         let mail = this.ourMail.map(p => {
+            if(p.place != this.currentPlace) return p;
+            return { place: destination, address: p.address };
+         }).filter(p => p.place != p.address);
+         return new VillageState(destination, mail);
+      }
+   }
+}
