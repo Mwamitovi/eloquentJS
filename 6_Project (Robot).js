@@ -96,7 +96,7 @@ const routesGraph = buildGraph(routes);
  * Our postabot picks "mail" when it comes to them (start), 
  * and delivers this "mail" when it reaches their destinations (end).
  * The postabot must decide, at each point, where to go next.
- * It has finished it's task when all parcels have been delivered.
+ * It has finished it's task when all mails have been delivered.
  * 
  * We need to create a model (virtual world) to simulate this process.
  * This model tells us where postabot is, and where the "mail" is too.
@@ -174,7 +174,7 @@ firstState.currentPlace;
  * 
  * What is the dumbest strategy that could possibly work? 
  * `Postabot` could just move in a random direction every turn. 
- * That means, with great likelihood, it will eventually run into all parcels and 
+ * That means, with great likelihood, it will eventually run into all mails and 
  * then also at some point reach the place where they should be delivered. 
  */
 
@@ -228,7 +228,7 @@ function runRobot(state, robot, memory) {
  * Lights, Camera, Action:
  * 
  * To put this sophisticated robot to work, 
- * we first need a way to create a new state with some parcels. 
+ * we first need a way to create a new state with some mails. 
  * A static method (written below by directly adding a property to the constructor),
  * is a good place to put that functionality.
  */
@@ -320,8 +320,8 @@ runRobot(VillageState.random(), routeRobot);
  * 
  * `Postabot` could work more effectively,
  * if it adjusted its behavior to the actual work that needs to be done.
- * To do this, it has to be able to intentionally move toward a given parcel or
- * toward the location where a parcel has to be delivered. 
+ * To do this, it has to be able to intentionally move toward a given mail or
+ * toward the location where a mail has to be delivered. 
  * To do this, even when the goal is more than one move away, 
  * will require some kind of route-finding function.
  * 
@@ -405,10 +405,10 @@ function findRoute(graph, from, to) {
  * This robot uses its memory value as a list of directions to move in, just like the route-following robot.
  *  
  * Whenever that list is empty, it has to figure out what to do next. 
- * It takes the first undelivered parcel in the set and, 
- * if that parcel hasn’t been picked up yet, plots a route toward it.
+ * It takes the first undelivered mail in the set and, 
+ * if that mail hasn’t been picked up yet, plots a route toward it.
  * 
- * If the parcel has been picked up, it still needs to be delivered, 
+ * If the mail has been picked up, it still needs to be delivered, 
  * so the robot creates a route toward the delivery address instead. 
  */
 
@@ -428,7 +428,7 @@ function goalOrientedRobot({currentPlace,ourMail}, route = []) {
 }
 
 // test-case-3: (see mailDelivery.js)
-// This `Postabot` often finishes the task of delivering 5 parcels in about 16 turns.
+// This `Postabot` often finishes the task of delivering 5 mails in about 16 turns.
 // It's slightly better than routeRobot but still definitely not optimal.
 
 runRobot(VillageState.random(), goalOrientedRobot);
@@ -451,8 +451,19 @@ runRobot(VillageState.random(), goalOrientedRobot);
  * 
  * For the sake of fairness, make sure you give each task to both robots, 
  * rather than generating different tasks per robot.
+ * 
+ * Hint:
+ * You’ll have to write a variant of the runRobot function that, 
+ * instead of logging the events to the console, 
+ * returns the number of steps the robot took to complete the task.
+ * 
+ * Your measurement function can then, in a loop, generate new states and
+ * count the steps each of the robots takes. When it has generated enough measurements,
+ * it can use console.log to output the average for each robot, 
+ * which is the total number of steps taken divided by the number of measurements.
  */
-// 
+
+// counting our steps
 function countSteps(state, robot, memory) {
    for(let steps=0;; steps++) {
       if(state.ourMail.length == 0) return steps;
@@ -462,6 +473,7 @@ function countSteps(state, robot, memory) {
    }
 }
 
+// using a for-loop to iterate through the tasks
 function compareRobots(robot1, memory1, robot2, memory2) {
    let total1 = 0, total2 = 0;
    for(let i=0; i<100; i++) {
@@ -484,8 +496,48 @@ compareRobots(routeRobot, [], goalOrientedRobot, []);
  * 
  * Can you write a robot that finishes the delivery task faster than goalOrientedRobot? 
  * If you observe that robot’s behavior, what obviously stupid things does it do? 
- * How could those be improved?
- * 
+ * How could those be improved? 
  * If you solved the previous exercise, 
  * you might want to use your compareRobots function to verify whether you improved the robot. 
+ * 
+ * Hint:
+ * The main limitation of goalOrientedRobot is that it considers only one mail at a time. 
+ * Often, it will walk back and forth across the village because the mail it is looking at 
+ * happens to be at the other side of the map, even if there are others much closer.
+ * 
+ * One possible solution would be to compute routes for all mail and then take the shortest one. 
+ * Even better results can be obtained, if there are multiple shortest routes, 
+ * by preferring the ones that go to pick up a mail instead of delivering a mail.
  */
+
+// Define lazyRobot
+// accepts an object (having currentPlace and ourMail) and a route array
+// returns direction to move in.
+function lazyRobot({currentPlace, ourMail}, route) {
+   if(route.length == 0) {
+      // describe a route for every mail
+      let routes = ourMail.map(
+         mail => {
+            if(mail.place != currentPlace) {
+               return { route: findRoute(routesGraph, currentPlace, mail.place),
+                        pickUp: true };
+            } else {
+               return { route: findRoute(routesGraph, currentPlace, mail.address),
+                        pickUp: false };
+            }
+      });
+      // This determines the precedence a route gets when choosing.
+      // Route length counts negatively, routes that pick up a mail get a small bonus.
+      function score({route, pickUp})  {
+         return (pickUp ? 0.5 : 0) - route.length;
+      }
+
+      route = routes.reduce((a,b) => score(a) > score(b) ? a : b).route;      
+   }
+   return {direction: route[0], memory: route.slice(1)};
+}
+
+
+compareRobots(lazyRobot, [], goalOrientedRobot, []);
+// → Robot 1 needed 11.15 steps per task
+// → Robot 2 needed 11.15
