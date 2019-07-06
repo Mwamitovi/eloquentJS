@@ -88,7 +88,7 @@ runRobot(VillageState.random(), routeRobot)
 
 
 // test-case-3: using a work-plan
-runRobot(VillageState.random(), goalOrientedRobotoo)
+runRobot(VillageState.random(), goalOrientedRobot)
 
 // VM115:10 Moved to Mengo Hospital
 // VM115:10 Moved to Namirembe Cathedral
@@ -107,3 +107,21 @@ runRobot(VillageState.random(), goalOrientedRobotoo)
 // VM115:10 Moved to Rubaga Hospital
 // VM115:10 Moved to Lubiri Sec. School
 // VM115:4 Done in 16 turns
+
+
+// test-case-4: first compute routes for all mail
+runRobot(VillageState.random(), lazyRobot, [])
+// VM187:10 Moved to Mengo Hospital
+// VM187:10 Moved to Lungujja Progressive Primary
+// VM187:10 Moved to Lubiri Sec. School
+// VM187:10 Moved to Victory City Church
+// VM187:10 Moved to Rubaga Hospital
+// VM187:10 Moved to Miracle Center
+// VM187:10 Moved to Shell Rubaga
+// VM187:10 Moved to Mengo Post Office
+// VM187:10 Moved to Shell Rubaga
+// VM187:10 Moved to New Taxi Park
+// VM187:10 Moved to Shell Rubaga
+// VM187:10 Moved to Rubaga Hospital
+// VM187:10 Moved to Lubiri Sec. School
+// VM187:4 Done in 13 turns
