@@ -107,7 +107,7 @@ class Group{
 
     delete(value){
         // Ok, this can work only if this is the last value
-        // if(this.has(value)){ this.elements.pop(value); }
+           // if(this.has(value)){ this.elements.pop(value); }
         // Instead, we use filter() to create a new array
         // without the 'deleted' value
         this.elements = this.elements.filter(n => n !== value);
