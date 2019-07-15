@@ -1,6 +1,6 @@
 
-Understanding ECMAScript2017
-============================
+Understanding ECMAScript2017 (ES8)
+==================================
 
 ## SYNOPSIS
 
